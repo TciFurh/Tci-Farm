@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="{{pluResPath}}farm/theme.css"/>
+<style>
+  body { width:520px; display:inline-block; padding-top:4px; }
+  .hd { display:flex; align-items:center; gap:10px; padding:2px 2px 10px; margin-bottom:10px; border-bottom:1px solid var(--border); }
+  .logo { width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg,#2f9e6e,#4b7df5); display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .hd .t { font-size:16px; font-weight:700; }
+  .hd .s { font-size:9.5px; color:var(--faint); margin-top:2px; }
+  .grp { margin-bottom:9px; }
+  .gt { font-size:10px; color:var(--primary); font-weight:600; margin:0 0 5px 2px; }
+  .row { display:flex; align-items:baseline; gap:8px; padding:5px 8px; border-radius:7px; background:var(--card-soft); border:1px solid var(--border); margin-bottom:4px; }
+  .row code { font-family:Consolas,Monaco,monospace; font-size:10.5px; color:#8fd3b0; white-space:nowrap; }
+  .row span { font-size:9.5px; color:var(--sub); }
+  .tip { font-size:9px; color:var(--faint); line-height:16px; margin-top:8px; text-align:center; }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:4px 8px; }
+</style>
+</head>
+<body>
+  <div class="hd">
+    <div class="logo">🌱</div>
+    <div>
+      <div class="t">Tci-Farm</div>
+      <div class="s">自带引擎 · 无需面板 · 图片回复</div>
+    </div>
+  </div>
+
+  <div class="grp">
+    <div class="gt">查看</div>
+    <div class="cols">
+      <div class="row"><code>#农场概览</code><span>等级资产</span></div>
+      <div class="row"><code>#我的农场</code><span>24 块地</span></div>
+      <div class="row"><code>#农场背包</code><span>库存</span></div>
+      <div class="row"><code>#农场设置</code><span>配置总览</span></div>
+    </div>
+  </div>
+
+  <div class="grp">
+    <div class="gt">登录与账号</div>
+    <div class="row"><code>#农场登录 输码 &lt;code&gt;</code><span>QQ 农场，同名账号会覆盖更新</span></div>
+    <div class="row"><code>#农场登录 微信</code><span>微信扫码，扫完自动建号并挂机</span></div>
+    <div class="row"><code>#农场账号</code><span>我的农场列表 / 默认 / 解绑</span></div>
+  </div>
+
+  <div class="grp">
+    <div class="gt">修改设置</div>
+    <div class="row"><code>#农场设置 5 关</code><span>按编号改（编号见设置图）</span></div>
+    <div class="row"><code>#农场设置 施肥策略 不施肥</code><span>按名称改</span></div>
+    <div class="row"><code>#农场设置 2 5 关</code><span>第 2 个农场账号的第 5 项</span></div>
+  </div>
+
+  <div class="grp">
+    <div class="gt">账号切换</div>
+    <div class="row"><code>#我的农场 2</code><span>看第 2 个绑定农场（各命令通用）</span></div>
+    <div class="row"><code>#农场账号 默认 2</code><span>把第 2 个设为默认</span></div>
+  </div>
+
+  <div class="tip">自动化范围：种植收获、务农、施肥、升级土地、任务、补肥、喂狗、卖果实<br/>不含好友互动与牧场 · 一个号可绑定多个农场</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="{{pluResPath}}farm/theme.css"/>
+<style>
+  body { width:430px; display:inline-block; padding-top:4px; }
+  .top { display:flex; align-items:center; gap:12px; }
+  .ava { width:52px; height:52px; border-radius:12px; object-fit:cover; background:var(--card-soft); flex-shrink:0; }
+  .info { flex:1; min-width:0; }
+  .nm { font-size:17px; font-weight:600; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .lv { font-size:9px; padding:2px 6px; border-radius:4px; background:var(--primary-soft); color:var(--primary); font-weight:600; margin-left:6px; vertical-align:3px; }
+  .on { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--primary); margin-top:6px; }
+  .on i { width:5px; height:5px; border-radius:50%; background:var(--primary); display:inline-block; }
+  .on.off { color:var(--danger); } .on.off i { background:var(--danger); }
+  .up { font-size:9.5px; color:var(--faint); margin-top:3px; }
+
+  .pbar { height:5px; border-radius:3px; background:rgba(255,255,255,.07); margin-top:9px; overflow:hidden; }
+  .pbar i { display:block; height:100%; border-radius:3px; background:var(--primary); }
+  .pexp { display:flex; justify-content:space-between; font-size:9.5px; color:var(--sub); margin-top:5px; }
+
+  .assets { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:10px; }
+  .as { display:flex; align-items:center; gap:7px; background:var(--card-soft); border:1px solid var(--border); border-radius:9px; padding:7px 9px; }
+  .as img { width:18px; height:18px; object-fit:contain; }
+  .as .v { font-size:13px; font-weight:600; }
+  .as .k { font-size:9px; color:var(--faint); margin-left:auto; }
+
+  .stats { display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; margin-top:10px; }
+  .st { background:var(--card-soft); border:1px solid var(--border); border-radius:9px; padding:7px 4px; text-align:center; }
+  .st b { display:block; font-size:14px; font-weight:600; }
+  .st span { font-size:9px; color:var(--faint); }
+  .foot { font-size:9.5px; color:var(--faint); text-align:center; margin-top:9px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      {{if account.avatar}}<img class="ava" src="{{account.avatar}}"/>{{/if}}
+      <div class="info">
+        <div class="nm">{{account.name}}<span class="lv">Lv.{{account.level}}</span></div>
+        <div class="on {{if !account.connected}}off{{/if}}"><i></i>{{if account.connected}}在线挂机{{else}}已离线{{/if}} · 已运行 {{account.uptime}}</div>
+        <div class="up">今日累计操作 {{todayTotal}} 次</div>
+      </div>
+    </div>
+
+    <div class="pbar"><i style="width:{{exp.pct}}%"></i></div>
+    <div class="pexp"><span>经验 {{exp.current}} / {{exp.needed}}</span><span>{{if exp.perHour}}+{{exp.perHour}}/时 · 升级约 {{exp.leftHours}}{{else}}暂无速率{{/if}}</span></div>
+
+    <div class="assets">
+      <div class="as"><img src="{{icons.gold}}"/><span class="v">{{assets.gold}}</span><span class="k">金币</span></div>
+      <div class="as"><img src="{{icons.coupon}}"/><span class="v">{{assets.coupon}}</span><span class="k">点券</span></div>
+      <div class="as"><img src="{{icons.diamond}}"/><span class="v">{{assets.diamond}}</span><span class="k">钻石</span></div>
+      <div class="as"><img src="{{icons.goldBean}}"/><span class="v">{{assets.goldBean}}</span><span class="k">金豆豆</span></div>
+    </div>
+
+    <div class="stats">
+      <div class="st"><b>{{today.harvest}}</b><span>收获</span></div>
+      <div class="st"><b>{{today.plant}}</b><span>种植</span></div>
+      <div class="st"><b>{{today.farming}}</b><span>务农</span></div>
+      <div class="st"><b>{{today.fertilize}}</b><span>施肥</span></div>
+      <div class="st"><b>{{today.task}}</b><span>任务</span></div>
+    </div>
+
+    <div class="foot">在种 {{exp.planted}} 块 · #我的农场 看地块 · #农场设置 改配置</div>
+  </div>
+</body>
+</html>

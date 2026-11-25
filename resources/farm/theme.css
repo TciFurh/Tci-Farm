@@ -1,0 +1,59 @@
+/* 农场插件通用深色主题 —— 与网页端 clean.css 的深色变量保持一致 */
+:root {
+  --bg: #0d0f12;
+  --card: #15181d;
+  --card-soft: #1a1d22;
+  --border: #2a2e35;
+  --border-strong: #363b43;
+  --ink: #eef0f4;
+  --sub: #9aa1ac;
+  --faint: #6e7681;
+  --primary: #4b7df5;
+  --primary-rgb: 75, 125, 245;
+  --primary-soft: #17223a;
+  --danger: #d1666d;
+  --danger-soft: #251517;
+  --warn: #c08a45;
+  --warn-rgb: 192, 138, 69;
+  --table-head: #171a1f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  zoom: 1.8;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* 页脚统一留白，避免最后一张卡片贴边 */
+  padding-bottom: 15px;
+}
+
+.label { font-size: 9px; letter-spacing: 2.3px; color: var(--faint); text-transform: uppercase; line-height: 1.4; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.28); }
+.hd { padding-bottom: 2px; }
+.hd h1 { font-size: 18px; font-weight: 600; color: var(--ink); letter-spacing: .5px; margin-top: 3px; }
+.hd .acc { font-size: 11px; color: var(--sub); margin-top: 5px; }
+.hd .acc b { color: var(--primary); }
+
+.tag { font-size: 9.5px; padding: 2px 9px; border-radius: 6px; background: var(--primary-soft); color: var(--primary); font-weight: 600; letter-spacing: .5px; white-space: nowrap; }
+.tag.gray { background: rgba(255, 255, 255, 0.06); color: var(--sub); }
+.tag.red { background: var(--danger-soft); color: var(--danger); }
+
+.row { display: flex; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.row:last-child { border-bottom: none; }
+.row .name { flex: 1; font-size: 13px; font-weight: 600; color: var(--ink); }
+.row .name small { font-weight: 400; color: var(--faint); font-size: 10.5px; margin-left: 6px; }
+
+.stats { display: flex; margin-top: 10px; flex-wrap: wrap; }
+.stats .st { flex: 1; text-align: center; min-width: 60px; }
+.stats .v { font-size: 16px; font-weight: 600; color: var(--primary); }
+.stats .k { font-size: 9.5px; color: var(--faint); margin-top: 2px; }
+
+.chips { display: flex; gap: 7px; margin-top: 12px; flex-wrap: wrap; }
+.chip { background: var(--primary-soft); border: 1px solid rgba(var(--primary-rgb), 0.24); color: var(--primary); border-radius: 8px; padding: 4px 12px; font-size: 11px; font-weight: 600; }
+.chip.gray { background: rgba(255, 255, 255, 0.05); border-color: var(--border); color: var(--sub); }
+.chip span { font-weight: 400; color: var(--sub); margin-left: 2px; }
+
+.ft { text-align: center; font-size: 9px; letter-spacing: 2px; color: var(--faint); text-transform: uppercase; }

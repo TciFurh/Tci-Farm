@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="{{pluResPath}}farm/theme.css"/>
+<style>
+  body { width:560px; display:inline-block; padding-top:4px; }
+  .hd { display:flex; align-items:baseline; gap:8px; padding:1px 2px 9px; margin-bottom:9px; border-bottom:1px solid var(--border); }
+  .hd .t { font-size:13px; font-weight:600; }
+  .hd .m { font-size:9.5px; color:var(--faint); }
+  .hd .r { margin-left:auto; font-size:9.5px; color:var(--sub); }
+  .grp { margin-bottom:10px; }
+  .gt { font-size:10px; color:var(--primary); font-weight:600; margin:0 0 6px 2px; }
+  .gt span { color:var(--faint); font-weight:400; margin-left:5px; }
+  .grid { display:grid; grid-template-columns:repeat(6, 1fr); gap:6px; }
+  .it { position:relative; background:var(--card-soft); border:1px solid var(--border); border-radius:9px; padding:6px 4px 5px; text-align:center; }
+  .it img { width:30px; height:30px; object-fit:contain; display:block; margin:0 auto; }
+  .it .nm { font-size:8.5px; color:var(--sub); margin-top:3px; line-height:11px; height:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .it .ct { font-size:9.5px; font-weight:600; color:var(--ink); }
+  .it .lk { position:absolute; top:3px; right:3px; font-size:7.5px; color:var(--warn); }
+  .it .mu { font-size:7.5px; color:var(--warn); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .foot { font-size:9px; color:var(--faint); text-align:center; margin-top:8px; }
+</style>
+</head>
+<body>
+  <div class="hd">
+    <span class="t">农场背包</span>
+    <span class="m">{{account.name}}{{if account.uin}} · {{account.uin}}{{/if}}</span>
+    <span class="r">{{totalKinds}} 种 · 共 {{totalCount}}</span>
+  </div>
+
+  {{each groups g}}
+  <div class="grp">
+    <div class="gt">{{g.label}}<span>{{g.count}} 种</span></div>
+    <div class="grid">
+      {{each g.items it}}
+      <div class="it">
+        {{if it.locked}}<span class="lk">锁</span>{{/if}}
+        {{if it.img}}<img src="{{it.img}}"/>{{/if}}
+        <div class="nm">{{it.name}}</div>
+        <div class="ct">×{{it.count}}</div>
+        {{if it.mut}}<div class="mu">{{it.mut}}</div>{{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/each}}
+
+  {{if !groups.length}}<div class="foot">背包是空的</div>{{/if}}
+  <div class="foot">#我的农场 看地块 · #农场概览 看收益</div>
+</body>
+</html>

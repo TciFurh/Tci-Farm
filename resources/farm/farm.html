@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="{{pluResPath}}farm/theme.css"/>
+<style>
+  body { width:640px; display:inline-block; padding-top:4px; }
+  .sum { display:flex; align-items:center; gap:12px; padding:1px 2px 10px; margin-bottom:10px; border-bottom:1px solid var(--border); }
+  .sum .s { text-align:center; min-width:34px; }
+  .sum .s b { display:block; font-size:15px; font-weight:600; }
+  .sum .s span { font-size:9px; color:var(--faint); }
+  .sum .s.hot b { color:var(--primary); }
+  .sum .vr { width:1px; height:20px; background:var(--border); }
+  .sum .title { margin-left:auto; text-align:right; }
+  .sum .title b { font-size:12.5px; }
+  .sum .title span { font-size:9px; color:var(--faint); }
+
+  .grid { display:grid; grid-template-columns:repeat(6, 1fr); gap:7px; }
+  .l { position:relative; height:104px; border:1px solid var(--border); border-radius:10px; background:var(--card-soft); padding:5px 6px; display:flex; flex-direction:column; overflow:hidden; }
+  .l.ripe { border-color:rgba(75,125,245,.55); }
+  .l.dead { opacity:.62; }
+  .l .no { font-size:8.5px; color:var(--faint); }
+  .l .art { flex:1; display:flex; align-items:center; justify-content:center; min-height:0; }
+  .l .art img { width:38px; height:38px; object-fit:contain; }
+  .l .ph { font-size:9px; color:var(--faint); }
+  .l .an { font-size:10px; font-weight:600; text-align:center; line-height:12px; height:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .l .tm { text-align:center; font-size:8.5px; color:var(--sub); height:11px; line-height:11px; white-space:nowrap; overflow:hidden; }
+  .l .tm.ok { color:var(--primary); font-weight:600; }
+  .l .bar { height:3px; border-radius:2px; background:rgba(255,255,255,.07); margin-top:3px; overflow:hidden; }
+  .l .bar i { display:block; height:100%; background:var(--primary); }
+  .l .needs { position:absolute; top:4px; right:5px; display:flex; gap:2px; }
+  .l .needs i { width:6px; height:6px; border-radius:50%; display:inline-block; }
+  .n-water { background:#4b7df5; } .n-weed { background:#3fae6d; } .n-bug { background:#d1666d; }
+  .l .season { position:absolute; bottom:4px; right:5px; font-size:8px; color:var(--warn); }
+  .l .mut { display:flex; gap:2px; justify-content:center; height:12px; }
+  .l .mut img { width:11px; height:11px; object-fit:contain; }
+  .foot { font-size:9px; color:var(--faint); margin-top:9px; text-align:center; }
+</style>
+</head>
+<body>
+  <div class="sum">
+    <div class="s"><b>{{summary.total}}</b><span>地块</span></div><div class="vr"></div>
+    <div class="s hot"><b>{{summary.ripe}}</b><span>成熟</span></div><div class="vr"></div>
+    <div class="s"><b>{{summary.growing}}</b><span>生长</span></div><div class="vr"></div>
+    <div class="s"><b>{{summary.empty}}</b><span>空地</span></div><div class="vr"></div>
+    <div class="s"><b>{{summary.needWater}}</b><span>水</span></div><div class="vr"></div>
+    <div class="s"><b>{{summary.needWeed}}</b><span>草</span></div><div class="vr"></div>
+    <div class="s"><b>{{summary.needBug}}</b><span>虫</span></div>
+    <div class="title"><b>{{account.name}}</b><br/><span>{{account.uin}}</span></div>
+  </div>
+
+  <div class="grid">
+    {{each lands l}}
+    <div class="l {{if l.ripe}}ripe{{/if}} {{if l.dead}}dead{{/if}}">
+      <div class="no">#{{l.id}}{{if l.soil !== '普通'}} · {{l.soil}}{{/if}}{{if l.season}} · <b style="color:#c08a45">{{l.season}}</b>{{/if}}</div>
+      {{if l.needs.length}}
+      <div class="needs">
+        {{each l.needs n}}<i class="n-{{n}}"></i>{{/each}}
+      </div>
+      {{/if}}
+      <div class="art">
+        {{if l.img}}<img src="{{l.img}}"/>{{else}}<span class="ph">{{if l.empty}}空{{else}}—{{/if}}</span>{{/if}}
+      </div>
+      {{if l.mutants.length}}<div class="mut">{{each l.mutants m}}<img src="{{m.img}}"/>{{/each}}</div>{{/if}}
+      <div class="an">{{if l.empty}}可种植{{else}}{{l.displayPlant}}{{/if}}</div>
+      <div class="tm {{if l.ripe}}ok{{/if}}">
+        {{if l.empty}}—{{else if l.ripe}}可收获{{else if l.matureAt}}{{l.matureAt}}（{{l.tick}}）{{else}}{{l.tick}}{{/if}}
+      </div>
+      {{if !l.empty}}<div class="bar"><i style="width:{{l.pct}}%"></i></div>{{/if}}
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="foot">水/草/虫 = 需要处理的地块 · #农场概览 看收益 · #农场背包 看库存</div></body>
+</html>

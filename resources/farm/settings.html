@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="{{pluResPath}}farm/theme.css"/>
+<style>
+  body { width:520px; display:inline-block; padding-top:4px; }
+  .hd { display:flex; align-items:baseline; gap:8px; padding:1px 2px 9px; margin-bottom:9px; border-bottom:1px solid var(--border); }
+  .hd .t { font-size:13px; font-weight:600; }
+  .hd .m { font-size:9.5px; color:var(--faint); }
+  .grp { margin-bottom:9px; }
+  .gt { font-size:10px; color:var(--primary); font-weight:600; margin:0 0 5px 2px; }
+  .row { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:8px; background:var(--card-soft); border:1px solid var(--border); margin-bottom:4px; }
+  .row .no { font-size:9.5px; color:var(--faint); width:18px; flex-shrink:0; text-align:right; }
+  .row .nm { font-size:11.5px; }
+  .row .hint { display:block; font-size:8.5px; color:var(--faint); margin-top:2px; }
+  .row .val { margin-left:auto; font-size:11px; font-weight:600; color:var(--ink); white-space:nowrap; }
+  .row .val.on { color:var(--primary); }
+  .row .val.off { color:var(--faint); font-weight:400; }
+  .foot { font-size:9px; color:var(--faint); text-align:center; margin-top:8px; line-height:16px; }
+</style>
+</head>
+<body>
+  <div class="hd">
+    <span class="t">农场设置</span>
+    <span class="m">{{account.name}}{{if account.uin}} · {{account.uin}}{{/if}}</span>
+  </div>
+
+  {{each groups g}}
+  <div class="grp">
+    <div class="gt">{{g.name}}</div>
+    {{each g.items it}}
+    <div class="row">
+      <span class="no">{{it.no}}</span>
+      <div>
+        <span class="nm">{{it.name}}</span>
+        {{if it.hint}}<span class="hint">{{it.hint}}</span>{{/if}}
+      </div>
+      <span class="val {{if it.valueText === '开'}}on{{else if it.valueText === '关'}}off{{/if}}">{{it.valueText}}</span>
+    </div>
+    {{/each}}
+  </div>
+  {{/each}}
+
+  <div class="foot">
+    改法：#农场设置 2 关　#农场设置 9 不施肥　#农场设置 24 45<br/>
+    也可以写名称：#农场设置 种植策略 最高等级作物　指定农场：#农场设置 2 5 关
+  </div>
+</body>
+</html>
