@@ -1,0 +1,40 @@
+{
+  "name": "tci-farm",
+  "version": "1.0.0",
+  "description": "Tci-Farm：自带引擎的 QQ 农场助手（ALemonJS 插件）",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "engine",
+    "resources",
+    "README.md"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/install-engine.mjs"
+  },
+  "dependencies": {
+    "art-template": "^4.13.2",
+    "puppeteer-core": "^24.0.0"
+  },
+  "peerDependencies": {
+    "alemonjs": ">=2.1.0"
+  },
+  "keywords": [
+    "alemonjs",
+    "plugin",
+    "qq-farm",
+    "farm"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "alemonjs": "^2.1.127"
+  }
+}

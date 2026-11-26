@@ -1,4 +1,4 @@
-# Tci-Farm（JiuLi 插件）
+# Tci-Farm（ALemonJS 插件）
 
 [【开发反馈点此进群】](https://qm.qq.com/q/PGDNTe3SA6)
 [【完整无阉割功能体验】](https://qm.qq.com/q/pwGqTOLaq4)
@@ -7,6 +7,15 @@
 
 不依赖面板的 QQ 农场机器人插件：**自带引擎**（把 qq-farm-bot 的运行核心抽出来直接跑），
 登录、查询、自动化、改配置全部在这一个插件里完成，不需要再部署 3007 面板。
+
+## 分支说明
+
+| 分支 | 框架 | 入口 |
+|---|---|---|
+| `master` | JiuLi | `index.js`（`export default class extends JiuLiPlugin`） |
+| `alemonx` | ALemonJS | `src/index.js`（`defineChildren` + `defineRouter`） |
+
+本分支为 **ALemonJS** 适配版，引擎（`engine/`）与模板（`resources/`）与 master 完全一致。
 
 ## 功能
 
@@ -23,8 +32,9 @@
 
 - 权限：**所有人可用**；一个用户可绑定多个农场，用序号切换。
 - 自动化范围：种植收获、务农、施肥、升级土地、做任务、补肥、喂狗、卖果实。
+- 已移除好友互动与牧场实现，只保留农场能力。
 
-## 设置项（25 项）
+### 设置项（25 项）
 
 | 编号 | 名称 | 类型 |
 |---|---|---|
@@ -64,55 +74,63 @@
 
 ## 安装
 
-1. 放到 JiuLi 的插件目录：
+### 方式一：npm 安装（发布后）
 
-```
-cd <jiuli目录>/plugins
-git clone <本仓库地址> farm-lite
-```
-
-2. 安装引擎依赖（首次）：
-
-```
-cd farm-lite/engine
-npm install
+```bash
+npm i tci-farm
 ```
 
-3. 重载插件（`#重载`），发 `#农场帮助` 验证。
+在你项目的入口注册插件（按 ALemonJS 的插件加载方式）。
 
-> 开发目录放在插件目录外不会被 JiuLi 加载；要启用时再放进 `plugins/`。
+### 方式二：本地目录
+
+```bash
+cd <alemonjs项目>
+npm i /path/to/Tci-Farm
+```
+
+### 通用步骤
+
+1. 安装引擎依赖（首次）：
+   ```bash
+   cd node_modules/tci-farm/engine && npm install
+   ```
+   或直接执行 `node node_modules/tci-farm/scripts/install-engine.mjs`
+
+2. 图片渲染使用本机浏览器（Edge / Chrome），无需下载 Chromium：
+   ```bash
+   # 自动查找，找不到时用环境变量指定
+   TCI_BROWSER=/path/to/chrome npm start
+   ```
+
+3. 启动机器人，发 `#农场帮助` 验证。
 
 ## 目录结构
 
 ```
-farm-lite/
-├── index.js                 # 命令入口
-├── model/
-│   ├── engine.js            # 引擎进程管理与 IPC 调用（自动重启）
-│   ├── bindings.js          # 用户 ↔ 农场账号绑定（支持一人多农场）
-│   ├── panels.js            # 概览/地块/背包/设置 数据整形
-│   └── settings.js          # 25 项设置模型与读写
-├── resources/farm/          # 图片模板（帮助/概览/地块/背包/设置）
-└── engine/
-    ├── runner.cjs           # 引擎入口：无面板 runtime + IPC + 图片服务
-    ├── package.json         # 引擎依赖
-    ├── vendor/session-contract/
-    ├── core/dist/           # 游戏协议运行时（来自 qq-farm-bot）
-    └── core/src/utils/      # tsdk.wasm / tsdk-wx.wasm
+Tci-Farm/
+├── package.json
+├── src/
+│   ├── index.js             # defineChildren 入口
+│   ├── router.js            # 命令路由
+│   ├── response/            # 7 个命令的响应
+│   ├── model/               # 引擎客户端 / 绑定 / 数据整形 / 设置
+│   └── render/render.js     # 模板渲染 + 系统浏览器截图
+├── resources/farm/          # 图片模板与主题
+├── engine/                  # 内置引擎（无面板 runtime）
+└── scripts/install-engine.mjs
 ```
 
 ## 引擎说明
 
-- 基于 [qq-farm-bot](https://github.com/liyangpengs/qq-farm-bot) 的核心（2026-11-16 版本）抽取，
-  去掉了 Web 面板，只保留协议运行时。
-- 对核心做了两处改动：`start()` 支持 `skipAccountRestore`（启动时不自动拉起历史账号）；
-- 移除好友互动与牧场的全部实现（services/friend、services/ranch 仅保留调度占位），只保留农场相关能力。
-- 账号数据存放在 `data/engine/`，与任何面板的数据互不影响。
-- 登录后由核心的自动化调度器按设置执行，插件只负责展示和改配置。
+- 基于 [qq-farm-bot](https://github.com/liyangpengs/qq-farm-bot) 的核心抽取，去掉了 Web 面板，只保留协议运行时。
+- 对核心做了两处改动：`start()` 支持 `skipAccountRestore`（启动时不自动拉起历史账号）；移除好友互动与牧场的全部实现（`services/friend`、`services/ranch` 仅保留调度占位），只保留农场能力。
+- 账号数据存放在 `data/engine/`（可用 `TCI_FARM_DATA` 指定数据目录）。
 - 图片资源随插件本体分发（`engine/core/src/gameConfig`），卡片直接引用本地文件，不启动任何图片服务。
+- 登录后由核心的自动化调度器按设置执行，插件只负责展示和改配置。
 
 ## 注意
 
 - QQ 抓包 code 有效期有限，过期后客户端会断开，重新发 `#农场登录 输码 <新code>` 即可。
 - 微信扫码登录依赖微信开放平台扫码协议，网络异常时重试即可。
-- 图片渲染依赖 JiuLi 的浏览器渲染组件（与其它图片插件一致）。
+- 渲染需要本机安装 Edge 或 Chrome；无浏览器时命令会提示，图片功能不可用，其它功能正常。
