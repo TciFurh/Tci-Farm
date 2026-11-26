@@ -1,7 +1,7 @@
 # Tci-Farm（JiuLi 插件）
 
-【开发反馈点此进群】(https://qm.qq.com/q/PGDNTe3SA6)
-【完整无阉割功能体验】(https://qm.qq.com/q/pwGqTOLaq4)
+[【开发反馈点此进群】](https://qm.qq.com/q/PGDNTe3SA6)
+[【完整无阉割功能体验】](https://qm.qq.com/q/pwGqTOLaq4)
 
 > 因为懒，只从上游扒了农场部分功能，其余功能（牧场、好友互动、活动、图鉴等）可自行补齐后发 PR。
 
