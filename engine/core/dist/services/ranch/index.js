@@ -1,6 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const { getState } = require('./state');
-const { prepareAction, operate } = require('./actions');
-module.exports = { getRanchState: getState, prepareRanchAction: prepareAction, operateRanch: operate };
-//# sourceMappingURL=index.js.map
+/**
+ * Tci-Farm 精简版占位：services/ranch/index.js 的功能（好友互动 / 牧场）已整体移除。
+ * 保留导出仅为兼容上游调度器的调用点，实际不执行任何游戏请求。
+ */
+const impl = { getRanchState: async () => ({ active: false, facilities: [], animals: [] }),
+  getRanchAutomationOptions: async () => [], }
+const handler = {
+  get(target, prop) {
+    if (prop in target) return target[prop]
+    if (prop === 'then') return undefined
+    if (prop === '__esModule') return false
+    return () => undefined
+  },
+}
+module.exports = new Proxy(impl, handler)

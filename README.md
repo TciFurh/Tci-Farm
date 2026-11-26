@@ -105,7 +105,8 @@ farm-lite/
 
 - 基于 [qq-farm-bot](https://github.com/liyangpengs/qq-farm-bot) 的核心（2026-11-16 版本）抽取，
   去掉了 Web 面板，只保留协议运行时。
-- 对核心做了一处改动：`start()` 支持 `skipAccountRestore`，避免插件启动时自动拉起历史账号（抢占登录位）。
+- 对核心做了两处改动：`start()` 支持 `skipAccountRestore`（启动时不自动拉起历史账号）；
+- 移除好友互动与牧场的全部实现（services/friend、services/ranch 仅保留调度占位），只保留农场相关能力。
 - 账号数据存放在 `data/engine/`，与任何面板的数据互不影响。
 - 登录后由核心的自动化调度器按设置执行，插件只负责展示和改配置。
 - 图片资源随插件本体分发（`engine/core/src/gameConfig`），卡片直接引用本地文件，不启动任何图片服务。
