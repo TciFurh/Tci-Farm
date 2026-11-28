@@ -103,11 +103,27 @@ async function _farmCode(w){
   if(!code)throw new Error('回包里没有 code')
   return String(code)
 }
+async function _sameAccounts(uin){
+  const list=((await _0x565d77['call']('accounts.list')).accounts)||[]
+  const u=String(uin)
+  return list.filter(a=>String(a.platform||'qq')==='qq'&&(String(a.uin||a.qq||'')===u||String(a.name||'')===u))
+}
+async function _dedupeAccounts(uin,keepId){
+  const keep=String(keepId||'')
+  if(!keep)return
+  for(const a of await _sameAccounts(uin)){
+    if(String(a.id)===keep)continue
+    try{await _0x565d77['call']('accounts.remove',{id:String(a.id)})}catch{}
+  }
+}
 async function loginByPacket(plugin,e,uin){
   if(!(e.isMaster||(e.sender&&e.sender.isMaster)))return false
   const say=s=>plugin.reply(e,s)
   const w=_farmPickBot(e.bot,uin)
   if(!w)return say('❎ 本机没有在线的 '+uin+'，取不到 code')
+  const _same = await _sameAccounts(uin).catch(() => [])
+  const _online = _same.find(a => a.running)
+  if (_online) return say('✅ ' + uin + ' 已经在挂机（#' + _online.id + '），不用再登录')
   await say('⏳ 正在用 '+uin+' 取农场 code…')
   let code
   try{code=await _farmCode(w)}catch(err){return say('❎ 取码失败：'+(err&&err.message||err))}
@@ -116,6 +132,7 @@ async function loginByPacket(plugin,e,uin){
     acc=await _0x565d77['call']('login.code',{name:String(uin),code,platform:'qq',uin:String(uin)},90000)
   }catch(err){return say('【登录失败】'+(err&&err.message||err))}
   if(!acc||!acc.id)return say('【登录失败】农场引擎没有返回账号')
+  try { await _dedupeAccounts(uin, acc.id) } catch {}
   try{_0x5db0af['bind'](plugin.uid(e),acc.id)}catch{}
   return say(['【登录成功】','· 账号：'+(acc.name||uin)+'（#'+acc.id+'）',acc.started?'· 已开始挂机，自动化按设置执行':'· 账号已保存，但启动失败（code 可能已过期）','· 注意：code 会过期，掉线后重新发本条指令即可'].join('\x0a'))
 }
@@ -141,14 +158,16 @@ async function _autoRefreshOne(engine, a) {
     console.log('[Tci-Farm] 自动换码失败 ' + a.id + '：' + (err && err.message || err))
     return
   }
+  let res
   const before = ((await engine.call('accounts.list')).accounts || []).map(x => String(x.id))
   try {
-    await engine.call('login.code', { id: String(a.id), name: a.name, code, platform: 'qq', uin: String(uin) }, 90000)
+    res = await engine.call('login.code', { id: String(a.id), name: a.name, code, platform: 'qq', uin: String(uin) }, 90000)
   } catch (err) {
     _auto.fail[a.id] = (_auto.fail[a.id] || 0) + 1
     console.log('[Tci-Farm] 自动重登失败 ' + a.id + '：' + (err && err.message || err))
     return
   }
+  try { await _dedupeAccounts(uin, res && res.id) } catch {}
   const after = (await engine.call('accounts.list')).accounts || []
   const extra = after.filter(x => !before.includes(String(x.id)))
   for (const x of extra) { try { await engine.call('accounts.remove', { id: String(x.id) }) } catch {} }
@@ -186,3 +205,26 @@ function _autoBoot(boot) {
   if (t.unref) t.unref()
   boot.autoTimer = t
 }
+
+
+// 启动后清理同号重复账号（保留在线的一个，其次保留编号最大的）
+setTimeout(async () => {
+  try {
+    const list = ((await _0x565d77['call']('accounts.list')).accounts) || []
+    const groups = {}
+    for (const a of list) {
+      const u = String(a.uin || a.qq || a.name || '')
+      if (!u) continue
+      ;(groups[u] = groups[u] || []).push(a)
+    }
+    for (const u of Object.keys(groups)) {
+      const g = groups[u]
+      if (g.length < 2) continue
+      const keep = g.find(x => x.running) || g.slice().sort((x, y) => Number(y.id) - Number(x.id))[0]
+      for (const a of g) {
+        if (String(a.id) === String(keep.id)) continue
+        try { await _0x565d77['call']('accounts.remove', { id: String(a.id) }) } catch {}
+      }
+    }
+  } catch {}
+}, 20000)
